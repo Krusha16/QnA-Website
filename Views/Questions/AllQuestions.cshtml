@@ -1,0 +1,127 @@
+﻿@model IPagedList<QnA_Website.Models.Question>
+@{
+    ViewBag.Title = "All Questions"+ ViewBag.SubTitle;
+}
+
+@using PagedList;
+@using PagedList.Mvc;
+
+<body data-new-gr-c-s-check-loaded="14.1008.0" data-gr-ext-installed="" cz-shortcut-listen="true">
+    <div id="__next">
+        <div>
+            <div class="layout_container__2yT5o">
+                <div class="layout_body__2IZRo">
+                    <nav class="sidebar_sidebar__1R-_j">
+                        <nav class="navigation_nav__8ntz-">
+                            <a class="nav-item_navItem__1zKDV nav-item_navItemSelected__2yQW2"
+                               href="@Url.Action("AllQuestions", "Questions")">
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" fill="none">
+                                    <path d="M8 0a8 8 0 100 16A8 8 0 008 0zM7 14.32a6.4 6.4 0 01-5.23-7.75L6 10.68v.8c0 .88.12 1.32 1 1.32v1.52zm5.72-2c-.2-.66-1-1.32-1.72-1.32h-1V9c0-.44-.56-1-1-1H5V6h1c.44 0 1-.56 1-1V4h2c.88 0 1.4-.72 1.4-1.6v-.33a6.4 6.4 0 012.32 10.24v.01z"
+                                          fill="currentColor"></path>
+                                </svg>
+                                <span>All Questions</span>
+                            </a>
+                            <a class="nav-item_navItem__1zKDV" href="@Url.Action("AllTags", "Questions")"><span>Tags</span></a>
+                            <a class="nav-item_navItem__1zKDV" href="/"><span>Users</span></a>
+                        </nav>
+                    </nav>
+                    <div class="main_border__3hdrZ">
+                        <div class="page-title_container__2y0RO">
+                            <div class="page-title_title__tRISx">
+                                <h1>All Questions @ViewBag.SubTitle</h1>
+                                <div class="page-title_buttonContainer__13v6e">
+                                    <p class="button_button__2-1iQ button_primary__1mGdL">
+                                        @Html.ActionLink("Ask Question", "AskQuestion", new { @class = "button_button__2-1iQ button_primary__1mGdL" })
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="button-group_container__F0-AA button-group_borderBottom__2Wu6p">
+                            <button id="newest" type="button" class="button_button__2-1iQ">
+                                Newest
+                            </button>
+                            <button id="popular" type="button" class="button_button__2-1iQ">
+                                Most Answred
+                            </button>
+                            <button id="votes" type="button" class="button_button__2-1iQ">
+                                Votes
+                            </button>
+                            <button id="oldest" type="button" class="button_button__2-1iQ">
+                                Oldest
+                            </button>
+                        </div>
+                        @Html.Hidden("RedirectToNewest", Url.Action("AllQuestions", "Questions"))
+                        @Html.Hidden("RedirectToVotes", Url.Action("SortByVotes", "Questions"))
+                        @Html.Hidden("RedirectToOldest", Url.Action("SortByOldest", "Questions"))
+                        @Html.Hidden("RedirectToPopular", Url.Action("SortByPopular", "Questions"))
+
+                        @foreach (var item in Model)
+                        {
+                            <div class="question-wrapper_container__2bbND">
+                                <div class="question-stats_container__3QsQi">
+                                    <div class="question-stats_vote__yiF6p"><span>@item.QuestionVotes.Count</span><p>votes</p></div>
+                                    <div class="question-stats_answer__1_14E"><span>@item.Answers.Count</span><p>answers</p></div>
+                                </div>
+                                <div class="question-summary_container__2ILnK">
+                                    @Html.ActionLink(item.Title, "QuestionDetail", new { id = item.Id }, new { @class = "question-summary_link__1Za_W" })
+                                    <div class="question-summary_excerpt__3dV1l">@item.Description</div>
+                                    <div class="question-summary_footer__2fK4q">
+                                        <div class="question-summary_tagContainer__2hPyr">
+                                            @foreach (var tag in item.Tags.ToList())
+                                            {
+                                                <p class="tag_tag__2CMZ9">
+                                                    @Html.ActionLink(tag.Name, "QuestionWithTag", new { Name = tag.Name })
+                                                </p>
+                                            }
+                                        </div>
+                                        <div class="question-summary_userDetails__rEgH0">
+                                            <div class="question-summary_info__PnzmK">
+                                                <span>asked @String.Format("{0:f}", @item.DatePosted)</span>
+                                                @Html.ActionLink(@item.ApplicationUser.UserName, "")
+                                                <span>reputation - @item.ApplicationUser.Reputation</span>
+                                                @if (item.ApplicationUser.GoldenBadges > 0)
+                                                {
+                                                    <span>Badges - @item.ApplicationUser.GoldenBadges</span>
+                                                }
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                        @Html.PagedListPager(Model, i => Url.Action(ViewBag.SortParm, "Questions", new { i }))
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
+
+<script>
+    document.getElementById('votes').addEventListener('click', function (e) {
+        e.preventDefault();
+        var url = $("#RedirectToVotes").val();
+        location.href = url;
+    });
+
+    document.getElementById('popular').addEventListener('click', function (e) {
+        e.preventDefault();
+        var url = $("#RedirectToPopular").val();
+        location.href = url;
+    });
+
+    document.getElementById('newest').addEventListener('click', function (e) {
+        e.preventDefault();
+        var url = $("#RedirectToNewest").val();
+        location.href = url;
+    });
+
+    document.getElementById('oldest').addEventListener('click', function (e) {
+        e.preventDefault();
+        var url = $("#RedirectToOldest").val();
+        location.href = url;
+    });
+
+</script>

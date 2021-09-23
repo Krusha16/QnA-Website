@@ -1,0 +1,250 @@
+﻿@model QnA_Website.Models.Question
+
+@{
+    ViewBag.Title = "QuestionDetail";
+}
+
+<body data-new-gr-c-s-check-loaded="14.1008.0" data-gr-ext-installed="">
+    <div id="__next">
+        <div>
+            <div class="layout_container__2yT5o">
+                <div class="layout_body__2IZRo layout_main__3O2ar">
+                    <nav class="sidebar_sidebar__1R-_j">
+                        <nav class="navigation_nav__8ntz-">
+                            <a class="nav-item_navItem__1zKDV nav-item_navItemSelected__2yQW2"
+                               href="@Url.Action("AllQuestions", "Questions")">
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" fill="none">
+                                    <path d="M8 0a8 8 0 100 16A8 8 0 008 0zM7 14.32a6.4 6.4 0 01-5.23-7.75L6 10.68v.8c0 .88.12 1.32 1 1.32v1.52zm5.72-2c-.2-.66-1-1.32-1.72-1.32h-1V9c0-.44-.56-1-1-1H5V6h1c.44 0 1-.56 1-1V4h2c.88 0 1.4-.72 1.4-1.6v-.33a6.4 6.4 0 012.32 10.24v.01z" fill="currentColor"></path>
+                                </svg>
+                                <span>All Questions</span>
+                            </a>
+                            <a class="nav-item_navItem__1zKDV" href="@Url.Action("AllTags", "Questions")"><span>Tags</span></a>
+                            <a class="nav-item_navItem__1zKDV" href="/"><span>Users</span></a>
+                        </nav>
+                    </nav>
+                    <div class="main_border__3hdrZ">
+                        <div class="page-title_container__2y0RO page-title_borderBottom__ijYtw">
+                            <div class="page-title_title__tRISx">
+                                <h1>@Model.Title</h1>
+                                <div class="page-title_buttonContainer__13v6e">
+                                    <p class="button_button__2-1iQ button_primary__1mGdL">
+                                        @Html.ActionLink("Ask Question", "AskQuestion", new { @class = "button_button__2-1iQ button_primary__1mGdL" })
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="detail-page-container_container__3BRtT">
+                            <div class="">
+                                <div class="post-wrapper_layout__bER9l">
+                                    <div class="post-vote_voteCell__1GCHp">
+                                        <button id="upvote" type="button" class="button_button__2-1iQ post-vote_voteButton__1PHsV">
+                                            <svg width="1em" height="1em" viewBox="0 0 36 36" fill="none" class="">
+                                                <path d="M2 26h32L18 10 2 26z" fill="currentColor"></path>
+                                            </svg>
+                                        </button>
+                                        @Html.Hidden("RedirectTo", Url.Action("UpVote", "Questions", new { id = Model.Id }))
+                                        <div class="post-vote_score__2te3m">@Model.QuestionVotes.Count</div>
+                                        <button id="downvote" type="button" class="button_button__2-1iQ post-vote_voteButton__1PHsV">
+                                            <svg width="1em" height="1em" viewBox="0 0 36 36" fill="none" class="">
+                                                <path d="M2 10h32L18 26 2 10z" fill="currentColor"></path>
+                                            </svg>
+                                        </button>
+                                        @Html.Hidden("RedirectToDown", Url.Action("DownVote", "Questions", new { id = Model.Id }))
+                                    </div>
+                                    <div class="post-summary_postCell__1oBZ0">
+                                        <div class="post-summary_text__18Au_">
+                                            @Model.Description
+                                        </div>
+                                        <div class="post-summary_footer__1H-y1">
+                                            <div class="post-summary_row__ZOglb">
+                                                <div class="post-summary_tagContainer__3H-7-">
+                                                    @foreach (var tag in Model.Tags.ToList())
+                                                    {
+                                                        <p class="tag_tag__2CMZ9">
+                                                            @Html.ActionLink(tag.Name, "QuestionWithTag", new { Name = tag.Name })
+                                                        </p>
+                                                    }
+                                                </div>
+                                                <div class="post-summary_userDetails__3b4Vw">
+                                                    <div class="post-summary_info__3c04Z">
+                                                        <span>@String.Format("{0:f}", Model.DatePosted)</span>
+                                                        <a href="">@Model.ApplicationUser.UserName</a>
+                                                        <span>reputation - @Model.ApplicationUser.Reputation</span>
+                                                        @if (Model.ApplicationUser.GoldenBadges > 0)
+                                                        {
+                                                            <span>Badges - @Model.ApplicationUser.GoldenBadges</span>
+                                                        }
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="comment-list_commentCell__369F6">
+
+                                        @foreach (var comment in Model.CommentOnQuestions)
+                                        {
+                                            <div class="comment-item_commentContainer__1ce-y">
+                                                <p>@comment.Content</p>
+                                                <a href="">@comment.ApplicationUser.UserName</a>
+                                            </div>
+                                        }
+
+
+                                        @using (Html.BeginForm("PostCommentOnQuestion", "Questions", new { @class = "add-comment_container__1HLB5" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                            <div class="textarea_container__u09m6">
+                                                @Html.TextArea("comment", new { @class = "textarea_textarea__1_Q73 add-answer_textarea__3uSC0" })
+                                                @Html.HiddenFor(Model => Model.Id)
+                                            </div>
+                                            <p class="add-comment_status__17kg1"></p>
+                                            <div>
+                                                <button type="submit" class="button_button__2-1iQ button_primary__1mGdL add-comment_button__1B6fu">Add Comment</button>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                            </div>
+                            <div class="answer-container_container__1JhnB">
+                                <div class="answer-container_header__2xWxk">
+                                    @if (Model.Answers.Count > 0)
+                                    {
+                                        <div class="answer-container_fill__2nEgn">
+                                            <h2> Answers</h2>
+                                        </div>
+                                    }
+                                </div>
+                                @foreach (var answer in Model.Answers)
+                                {
+                                    <div class="post-wrapper_layout__bER9l post-wrapper_borderBottom__3ei2Z">
+                                        <div class="post-vote_voteCell__1GCHp">
+                                            <a href="@Url.Action("UpVoteAnswer", "Answers", new { Id = answer.Id })">
+                                                <button type="button" class="button_button__2-1iQ post-vote_voteButton__1PHsV">
+                                                    <svg width="1em" height="1em" viewBox="0 0 36 36" fill="none" class="">
+                                                        <path d="M2 26h32L18 10 2 26z" fill="currentColor"></path>
+                                                    </svg>
+                                                </button>
+                                            </a>
+                                            <a href="@Url.Action("DownVoteAnswer", "Answers", new { Id = answer.Id })">
+                                                <div class="post-vote_score__2te3m">@answer.AnswerVotes.Count</div>
+                                                <button id="downvoteanswer" type="button" class="button_button__2-1iQ post-vote_voteButton__1PHsV">
+                                                    <svg width="1em" height="1em" viewBox="0 0 36 36" fill="none" class="">
+                                                        <path d="M2 10h32L18 26 2 10z" fill="currentColor"></path>
+                                                    </svg>
+                                                </button>
+                                            </a>
+                                            @if (answer.IsAccepted)
+                                            {
+                                                <div class="js-accepted-answer-indicator grid--cell fc-green-500 py6 mtn8"
+                                                     data-s-tooltip-placement="right" title="Loading when this answer was accepted…" tabindex="0" role="note" aria-label="Accepted">
+                                                    <div class="ta-center">
+                                                        <svg aria-hidden="true" class="svg-icon iconCheckmarkLg" width="36" height="36" viewBox="0 0 36 36">
+                                                            <path d="M6 14l8 8L30 6v8L14 30l-8-8v-8z"></path>
+                                                        </svg>
+                                                    </div>
+                                                </div>
+                                            }
+                                        </div>
+                                        <div class="post-summary_postCell__1oBZ0">
+                                            <div class="post-summary_text__18Au_">
+                                                @answer.Content
+                                            </div>
+                                            @Html.ActionLink("Mark As Accepted", "MarkAsAccepted", new { Id = answer.Id })
+                                            <div class="post-summary_footer__1H-y1">
+                                                <div class="post-summary_row__ZOglb">
+                                                    <div class="post-summary_tagContainer__3H-7-"></div>
+                                                    <div class="post-summary_userDetails__3b4Vw">
+                                                        <div class="post-summary_info__3c04Z">
+                                                            <span>@String.Format("{0:f}", answer.DatePosted)</span>
+                                                            <a href="">@answer.ApplicationUser.UserName</a>
+                                                            <span>reputation - @answer.ApplicationUser.Reputation</span>
+                                                            @if (answer.ApplicationUser.GoldenBadges > 0)
+                                                            {
+                                                                <span>Badges - @answer.ApplicationUser.GoldenBadges</span>
+                                                            }
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="comment-list_commentCell__369F6">
+                                            @foreach (var comment in answer.CommentOnAnswers)
+                                            {
+                                                <div class="comment-item_commentContainer__1ce-y">
+                                                    <p>@comment.Content –</p>
+                                                    <a href="">@comment.ApplicationUser.UserName</a>
+                                                </div>
+                                            }
+
+                                            @using (Html.BeginForm("PostCommentOnAnswer", "Answers", new { AnswerId = answer.Id, @class = "add-comment_container__1HLB5" }))
+                                            {
+                                                @Html.AntiForgeryToken()
+                                                <div class="textarea_container__u09m6">
+                                                    @Html.TextArea("comment", new { @class = "textarea_textarea__1_Q73 add-answer_textarea__3uSC0" })
+                                                </div>
+                                                <p class="add-comment_status__17kg1"></p>
+                                                <div>
+                                                    <button type="submit" class="button_button__2-1iQ button_primary__1mGdL add-comment_button__1B6fu">Add Comment</button>
+                                                </div>
+                                            }
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                            <div></div>
+                            <div class="add-answer_container__a2UTk">
+                                @using (Html.BeginForm("PostAnswer", "Answers"))
+                                {
+                                    <h2> Your answer </h2>
+                                    @Html.AntiForgeryToken()
+                                    <div class="textarea_container__u09m6">
+                                        @Html.TextArea("content", new { @class = "textarea_textarea__1_Q73 add-answer_textarea__3uSC0" })
+                                        @Html.HiddenFor(Model => Model.Id)
+                                    </div>
+                                    <p class="add-answer_status__3QM6A"></p>
+                                    <div>
+                                        <button type="submit" class="button_button__2-1iQ button_primary__1mGdL">
+                                            Post Your Answer
+                                        </button>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @if (ViewBag.Message != null)
+    {
+        <script type="text/javascript">
+
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+        </script>
+    }
+</body>
+
+
+<script>
+    document.getElementById('upvote').addEventListener('click', function (e) {
+        e.preventDefault();
+        var url = $("#RedirectTo").val();
+        location.href = url;
+    });
+
+    document.getElementById('downvote').addEventListener('click', function (e) {
+        e.preventDefault();
+        var url = $("#RedirectToDown").val();
+        location.href = url;
+
+    });
+</script>
+
+
+

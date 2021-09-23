@@ -1,0 +1,75 @@
+﻿@model QnA_Website.Models.Question
+@{
+    ViewBag.Title = "Ask Question";
+}
+
+<body data-new-gr-c-s-check-loaded="14.1008.0" data-gr-ext-installed="" cz-shortcut-listen="true">
+    <div id="__next">
+        <div>
+            <div class="question-ask-view_layout__3sMXE">
+                <div class="question-ask-view_container__2owuu">
+                    <div class="question-ask-view_topForm__3_Pm9">
+                        <h1>Ask a public question</h1>
+                    </div>
+
+                    @using (Html.BeginForm("AskQuestion", "Questions"))
+                    {
+                        @Html.AntiForgeryToken()
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <div class="question-form_container__16xGY">
+                            <div class="form-input_container__11zdg">
+                                <div class="form-input_label__2LiRg">
+                                    @Html.LabelFor(model => model.Title)
+                                </div>
+                                <p class="form-input_inputInfo__WypA7">
+                                    Be specific and imagine you’re asking a question to another person
+                                </p>
+                                <div class="form-input_inputContainer__2X5G4">
+                                    <div>
+                                        @Html.EditorFor(model => model.Title, new { htmlAttributes = new { @class = "form-control" } })
+                                        @Html.ValidationMessageFor(model => model.Title, "", new { @class = "text-danger" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="textarea_container__u09m6">
+                                @Html.LabelFor(model => model.Description, htmlAttributes: new { @class = "textarea_label__mSDaL" })
+                                <p class="textarea_inputInfo__2dxbD">Include all the information someone would need to answer your question</p>
+                                <div>
+                                    @Html.TextAreaFor(model => model.Description, new { htmlAttributes = new { @class = "form-control" } })
+                                    @Html.ValidationMessageFor(model => model.Description, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="tag-input_container__2pVaw">
+                                @Html.LabelFor(model => model.Tags, htmlAttributes: new { @class = "tag-input_label__pId26" })
+                                <p class="tag-input_inputInfo__27M7_">Add comma and/or space separated tags to describe what your question is about</p>
+                                <div class="tag-input_inputContainer__1Fkau">
+                                    <div class="react-tagsinput">
+                                        <div class="react-tagsinput-input">
+                                            @Html.Editor("tags", new { @class = "react-tagsinput-input" })
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="question-form_buttonContainer__3lhFs">
+                            <p class="question-form_status__1fOZr"></p>
+                            <div>
+                                <button type="submit" class="button_button__2-1iQ button_primary__1mGdL">
+                                    Post your question
+                                </button>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+@section Scripts
+{
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="~/Scripts/tinymce/tinymce.js"></script>
+    <script src="~/Scripts/main.js"></script>
+}
+

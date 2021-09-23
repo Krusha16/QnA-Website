@@ -1,0 +1,54 @@
+﻿@model Dictionary<QnA_Website.Models.Tag,int>
+@{
+    ViewBag.Title = "All Tags";
+}
+
+<body data-new-gr-c-s-check-loaded="14.1009.0" data-gr-ext-installed="">
+    <div id="__next">
+        <div>
+            <div class="layout_container__2yT5o">
+                <div class="layout_body__2IZRo layout_main__3O2ar">
+                    <nav class="sidebar_sidebar__1R-_j">
+                        <nav class="navigation_nav__8ntz-">
+                            <a class="nav-item_navItem__1zKDV nav-item_navItemSelected__2yQW2"
+                               href="@Url.Action("AllQuestions", "Questions")">
+                                <svg width="1em" height="1em" viewBox="0 0 16 16" fill="none">
+                                    <path d="M8 0a8 8 0 100 16A8 8 0 008 0zM7 14.32a6.4 6.4 0 01-5.23-7.75L6 10.68v.8c0 .88.12 1.32 1 1.32v1.52zm5.72-2c-.2-.66-1-1.32-1.72-1.32h-1V9c0-.44-.56-1-1-1H5V6h1c.44 0 1-.56 1-1V4h2c.88 0 1.4-.72 1.4-1.6v-.33a6.4 6.4 0 012.32 10.24v.01z" fill="currentColor"></path>
+                                </svg>
+                                <span>All Questions</span>
+                            </a>
+                            <a class="nav-item_navItem__1zKDV" href="@Url.Action("AllTags", "Questions")"><span>Tags</span></a>
+                            <a class="nav-item_navItem__1zKDV" href="/"><span>Users</span></a>
+                        </nav>
+                    </nav>
+                    <div class="main_border__3hdrZ">
+                        <div class="page-title_container__2y0RO">
+                            <div class="page-title_title__tRISx">
+                                <h1>Tags</h1>
+                                <div class="page-title_buttonContainer__13v6e"></div>
+                            </div>
+                            <p class="page-title_summary__3wbe9">
+                                A tag is a keyword or label that categorizes your question with
+                                other, similar questions. Using the right tags makes it easier for others to find and answer your
+                                question.
+                            </p>
+                        </div>
+                        <div class="tag-list_container__2r39F">
+                            @foreach (var item in Model)
+                            {
+                                <div class="tag-item_card__1Oy7m">
+                                    <div class="tag-item_header__2WEO8">
+                                        <div class="tag_tag__2CMZ9">
+                                            @Html.ActionLink(item.Key.Name, "QuestionWithTag", new { Name = item.Key.Name })
+                                        </div>
+                                    </div>
+                                    <p>@item.Value questions</p>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </body>
